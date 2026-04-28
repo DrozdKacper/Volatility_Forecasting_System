@@ -2,35 +2,49 @@ import numpy as np
 
 
 def add_features(df):
-    # 1. Logarytmiczne stopy zwrotu (Log Returns)
-    # Kluczowe dla stacjonarności szeregu czasowego
+    df = df.copy()
+
+    # --- 1. PODSTAWY ---
     df['log_return'] = np.log(df['close'] / df['close'].shift(1))
-
-    # 2. Log-Volatility (Target)
-    # Obliczamy zmienność jako kroczące odchylenie standardowe log-zwrotów
-    # Okno 24 (dla 1h) oznacza zmienność z ostatniej doby
-    window = 24
-    df['vol_raw'] = df['log_return'].rolling(window=window).std()
-
-    # Przekształcenie logarytmiczne zmienności (to, o czym pisałeś 🔥)
-    # Dodajemy małą stałą 1e-8, aby uniknąć log(0)
-    df['log_vol'] = np.log(df['vol_raw'] + 1e-8)
-
-    # 3. Dodatkowe cechy (Features) wspierające model
-    # Logarytm wolumenu (wolumen często rośnie wykładniczo)
-    df['log_volume'] = np.log(df['volume'] + 1)
-
-    # Zmienność wolumenu (pomaga wykryć anomalie/skoki aktywności)
-    df['vol_change'] = df['log_volume'].diff()
-
-    # Range (High-Low) w skali logarytmicznej
     df['log_range'] = np.log(df['high'] / df['low'])
+    df['log_volume'] = np.log1p(df['volume'])
 
-    # 4. Target: Co chcemy przewidzieć?
-    # Przesuwamy log_vol o 1 interwał w tył, aby model uczył się przewidywać przyszłość
-    df['target_log_vol'] = df['log_vol'].shift(-1)
+    # --- 2. ZMIENNOŚĆ KRÓTKOTERMINOWA (Bez wygładzania 24h) ---
+    # Patrzymy tylko na ostatnie 5 i 10 interwałów
+    df['vol_5'] = df['log_return'].rolling(5).std()
+    df['vol_10'] = df['log_return'].rolling(10).std()
 
-    # Czyszczenie danych z NaN (powstałych przez rolling i shift)
-    df.dropna(inplace=True)
+    # --- 3. ANOMALIE I SKOKI (Surge Features) ---
+    # Czy obecny ruch/wolumen jest większy niż średnia z ostatniej doby?
+    df['vol_surge'] = df['vol_5'] / (df['log_return'].rolling(24).std() + 1e-8)
+    df['volume_surge'] = df['log_volume'] / (df['log_volume'].rolling(24).mean() + 1e-8)
+    df['range_surge'] = df['log_range'] / (df['log_range'].rolling(24).mean() + 1e-8)
 
-    return df
+    # --- 4. POZYCJA CENY (Intraday Intensity) ---
+    # Gdzie zamknęliśmy się w relacji do High-Low (0 = na dnie, 1 = na szczycie)
+    df['close_pos'] = (df['close'] - df['low']) / (df['high'] - df['low'] + 1e-8)
+
+    # Odległość od średniej kroczącej (czy rynek jest "rozciągnięty")
+    df['dist_ma'] = df['close'] / df['close'].rolling(20).mean()
+
+    # --- 5. LAGI SUROWYCH ZWROTÓW (Dla RF) ---
+    df['log_ret_lag1'] = df['log_return'].shift(1)
+    df['log_ret_lag2'] = df['log_return'].shift(2)
+
+    return df.dropna()
+
+
+# --- NOWA LISTA CECH ---
+FEATURE_COLUMNS = [
+    "log_return",
+    "log_range",
+    "vol_5",
+    "vol_10",
+    "vol_surge",
+    "volume_surge",
+    "range_surge",
+    "close_pos",
+    "dist_ma",
+    "log_ret_lag1",
+    "log_ret_lag2"
+]
