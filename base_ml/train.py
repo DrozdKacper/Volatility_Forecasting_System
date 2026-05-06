@@ -1,12 +1,12 @@
 import pandas as pd
 import numpy as np
 from sklearn.ensemble import RandomForestRegressor
-from sklearn.linear_model import Ridge
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 import matplotlib.pyplot as plt
-from features import add_features, FEATURE_COLUMNS
-from target import add_target
+from features.features import add_features, FEATURE_COLUMNS
+from features.target import add_target
 from config import*
+
 
 
 def load_data(path):
@@ -75,7 +75,7 @@ def evaluate_global(all_preds, all_targets, all_naive):
 
 
 if __name__ == "__main__":
-    df = load_data("data/btc_1h.csv")
+    df = load_data("../data/btc_1h.csv")
 
     df = add_features(df)
     df = add_target(df)
