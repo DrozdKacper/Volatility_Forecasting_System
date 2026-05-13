@@ -8,7 +8,7 @@ from model.gru_model import GRUModel
 from features.target import add_target
 from config import*
 from training.trainer_gru import train_model
-from utils.data_reader import load_data
+from etl.load import load_data
 from utils.seed import set_seed
 from utils.sequences import create_sequences
 from utils.split import rolling_split
@@ -25,11 +25,7 @@ if __name__ == "__main__":
 
     mlflow.set_experiment("GRU_model")
 
-    df = load_data("data/btc_1h.csv")
-
-    df = add_features(df)
-    df = add_target(df)
-    df = df.dropna()
+    df = load_data("data/processed/btc_features.csv")
 
     splits = rolling_split(df)
 

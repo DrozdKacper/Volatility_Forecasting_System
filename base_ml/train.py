@@ -3,17 +3,16 @@ import numpy as np
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 import matplotlib.pyplot as plt
+
+from etl.load import load_data
 from features.features import add_features, FEATURE_COLUMNS
 from features.target import add_target
 from config import*
+from pathlib import Path
 
 
 
-def load_data(path):
-    df = pd.read_csv(path)
-    df["timestamp"] = pd.to_datetime(df["timestamp"])
-    df = df.sort_values("timestamp").reset_index(drop=True)
-    return df
+
 
 
 def rolling_split(df, train_size=TRAIN_SIZE, test_size=TEST_SIZE, step=STEP):
@@ -75,12 +74,12 @@ def evaluate_global(all_preds, all_targets, all_naive):
 
 
 if __name__ == "__main__":
-    df = load_data("../data/btc_1h.csv")
 
-    df = add_features(df)
-    df = add_target(df)
+    PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
-    df = df.dropna()
+    df = load_data(PROJECT_ROOT / "data/processed/btc_features.csv")
+
+    splits = rolling_split(df)
 
     splits = rolling_split(df)
 
