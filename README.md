@@ -28,7 +28,7 @@ The project focuses on building a realistic and reproducible workflow for financ
 
 #  Features
 
-##  ETL-Style Data Pipeline
+## ETL-Style Data Pipeline
 
 ### Extract
 - Automated historical OHLCV data collection from Binance
@@ -47,6 +47,11 @@ The project focuses on building a realistic and reproducible workflow for financ
 - Processed datasets prepared for model training
 - Sequence-based dataloaders for PyTorch
 - Structured outputs for evaluation and predictions
+
+### Pipeline Reliability
+- Structured logging across all ETL stages
+- Robust exception handling for data ingestion and processing
+- Unit tests covering core data processing logic using pytest
 
 ---
 
