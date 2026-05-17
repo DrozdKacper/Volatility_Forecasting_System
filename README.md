@@ -80,6 +80,19 @@ The model predicts **future market volatility** using a forward-looking target:
 
 ---
 
+## Data Quality Gate (Great Expectations)
+
+A validation layer is integrated into the training pipeline to ensure data reliability and prevent training on invalid or corrupted datasets.
+
+The pipeline is blocked if any expectation fails.
+
+This ensures:
+- reproducibility of experiments
+- prevention of data leakage
+- stability of training inputs across iterations
+
+---
+
 #  Deep Learning Model
 
 ## GRU Neural Network (PyTorch)
