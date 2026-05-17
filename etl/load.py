@@ -11,13 +11,14 @@ def load_data(path):
     try:
 
         df = pd.read_csv(path)
-        df["timestamp"] = pd.to_datetime(df["timestamp"])
+        df["timestamp"] = pd.to_datetime(df["timestamp"], errors="coerce")
         df = df.sort_values("timestamp").reset_index(drop=True)
 
         logger.info(
             f"Data successfully processed | final shape={df.shape} | "
             f"date range={df['timestamp'].min()} -> {df['timestamp'].max()}"
         )
+
 
         return df
 
