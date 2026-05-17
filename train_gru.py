@@ -4,6 +4,7 @@ import numpy as np
 from baselines.baselines import ewma_baseline
 from evaluation.evaluator import evaluate_model
 from features.features import add_features, FEATURE_COLUMNS
+from ge.validation import prepare_validator, validate_training_data
 from model.gru_model import GRUModel
 from features.target import add_target
 from config import*
@@ -26,6 +27,14 @@ if __name__ == "__main__":
     mlflow.set_experiment("GRU_model")
 
     df = load_data("data/processed/btc_features.csv")
+
+
+    validator = prepare_validator(df)
+
+    validation_success = validate_training_data(validator)
+
+    if not validation_success:
+        raise ValueError("Great Expectations validation failed.")
 
     splits = rolling_split(df)
 
