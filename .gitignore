@@ -20,11 +20,12 @@ ENV/
 .vscode/
 *.iml
 
-# =========================
-# Data (ważne w ML)
-# =========================
+# Data folders
 data/raw/
 data/processed/
+
+# BUT allow DVC metadata files
+!*.dvc
 
 # =========================
 # Logs / outputs
