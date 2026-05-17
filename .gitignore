@@ -23,9 +23,8 @@ ENV/
 # =========================
 # Data (ważne w ML)
 # =========================
-data/
-*.csv
-*.parquet
+data/raw/
+data/processed/
 
 # =========================
 # Logs / outputs
