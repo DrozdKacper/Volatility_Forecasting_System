@@ -1,0 +1,14 @@
+stages:
+  train:
+    cmd: python train_gru.py
+    deps:
+      - train_gru.py
+      - data/processed/btc_features.csv
+      - ge/
+      - features/
+      - model/
+      - training/
+      - evaluation/
+      - baselines/
+      - utils/
+      - config.py

@@ -20,12 +20,26 @@ ENV/
 .vscode/
 *.iml
 
-# Data folders
+# =========================
+# Data folders (tracked by DVC)
+# =========================
 data/raw/
 data/processed/
 
-# BUT allow DVC metadata files
+# Allow DVC metadata files
 !*.dvc
+
+# =========================
+# DVC
+# =========================
+.dvc/cache/
+.dvc/tmp/
+
+# =========================
+# MLflow
+# =========================
+mlruns/
+mlflow.db
 
 # =========================
 # Logs / outputs
@@ -39,10 +53,19 @@ logs/
 .ipynb_checkpoints/
 
 # =========================
+# Model artifacts
+# =========================
+models/
+checkpoints/
+
+# =========================
+# FastAPI / serving
+# =========================
+*.db
+*.sqlite3
+
+# =========================
 # OS files
 # =========================
 .DS_Store
 Thumbs.db
-
-mlruns/
-mlflow.db

@@ -1,0 +1,52 @@
+schema: '2.0'
+stages:
+  train:
+    cmd: python train_gru.py
+    deps:
+    - path: baselines/
+      hash: md5
+      md5: 3ff119e17fffe5509240db8615a7b63c.dir
+      size: 1949
+      nfiles: 2
+    - path: config.py
+      hash: md5
+      md5: 13094a16bd9e1bbe560883e68540b2b3
+      size: 202
+    - path: data/processed/btc_features.csv
+      hash: md5
+      md5: f4b5790ce7cc75bee104df7df6c64466
+      size: 15442253
+    - path: evaluation/
+      hash: md5
+      md5: ff9f49199ebae94b2245d4705fd16e52.dir
+      size: 8279
+      nfiles: 4
+    - path: features/
+      hash: md5
+      md5: 2df2da8ff2bca86b4e6dc4c5e67d4bca.dir
+      size: 5484
+      nfiles: 4
+    - path: ge/
+      hash: md5
+      md5: 02e4bcc4eacb4a32d4da514de7598fbd.dir
+      size: 4316
+      nfiles: 2
+    - path: model/
+      hash: md5
+      md5: 3f4aba981734dcde490e89ba0fc5daaa.dir
+      size: 4760
+      nfiles: 3
+    - path: train_gru.py
+      hash: md5
+      md5: 18958dcfe9d14428df6c201c71f288c9
+      size: 4176
+    - path: training/
+      hash: md5
+      md5: 5cf0fb8cd9d21939fd03bdc6a0998457.dir
+      size: 4195
+      nfiles: 3
+    - path: utils/
+      hash: md5
+      md5: 3a8fcff4cdab0adee6869fb5b3bacb88.dir
+      size: 7953
+      nfiles: 11
