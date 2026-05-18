@@ -21,11 +21,25 @@ ENV/
 *.iml
 
 # =========================
-# Data (ważne w ML)
+# Data folders (tracked by DVC)
 # =========================
-data/
-*.csv
-*.parquet
+data/raw/
+data/processed/
+
+# Allow DVC metadata files
+!*.dvc
+
+# =========================
+# DVC
+# =========================
+.dvc/cache/
+.dvc/tmp/
+
+# =========================
+# MLflow
+# =========================
+mlruns/
+mlflow.db
 
 # =========================
 # Logs / outputs
@@ -39,10 +53,19 @@ logs/
 .ipynb_checkpoints/
 
 # =========================
+# Model artifacts
+# =========================
+models/
+checkpoints/
+
+# =========================
+# FastAPI / serving
+# =========================
+*.db
+*.sqlite3
+
+# =========================
 # OS files
 # =========================
 .DS_Store
 Thumbs.db
-
-mlruns/
-mlflow.db
