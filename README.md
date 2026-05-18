@@ -165,6 +165,27 @@ Tracked parameters include:
 - batch size
 - training epochs
 
+## DVC Integration
+
+
+The project uses DVC (Data Version Control) to provide reproducible machine learning workflows and dataset versioning.
+
+Current DVC functionality includes:
+
+- dataset versioning for processed training data
+- reproducible training pipeline orchestration
+- dependency tracking for code, datasets, and configuration files
+- automatic pipeline caching to avoid unnecessary retraining
+- reproducible training execution through `dvc.yaml` and `dvc.lock`
+
+The DVC pipeline integrates with:
+
+- Great Expectations data validation
+- MLflow experiment tracking
+- GRU model training workflow
+
+This setup ensures deterministic and reproducible training runs across experiments and model iterations.
+
 ---
 
 #  Training Pipeline
