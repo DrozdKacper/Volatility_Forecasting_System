@@ -1,6 +1,8 @@
 stages:
   train:
     cmd: python train_gru.py
+    outs:
+      - artifacts/latest_run.txt
     deps:
       - train_gru.py
       - data/processed/btc_features.csv
@@ -12,3 +14,15 @@ stages:
       - baselines/
       - utils/
       - config.py
+
+  register:
+    cmd: python model_register/register_candidate.py
+    deps:
+      - artifacts/latest_run.txt
+      - model_register/register_candidate.py
+
+  promote:
+    cmd: python model_register/promote_model.py
+    deps:
+      - artifacts/latest_run.txt
+      - model_register/promote_model.py

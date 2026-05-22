@@ -1,3 +1,5 @@
+import os
+
 import pandas as pd
 import numpy as np
 
@@ -124,6 +126,15 @@ if __name__ == "__main__":
 
         mlflow.log_metric("corr_mean", np.mean(corr_list))
         mlflow.pytorch.log_model(model, "model")
+
+        run_id = mlflow.active_run().info.run_id
+
+        os.makedirs("artifacts", exist_ok=True)
+
+        with open("artifacts/latest_run.txt", "w") as f:
+            f.write(run_id)
+
+
 
 
 
