@@ -165,6 +165,38 @@ Tracked parameters include:
 - batch size
 - training epochs
 
+## Model Registry & Deployment Workflow
+
+### Model Registry & Champion/Challenger Workflow
+
+The project includes an automated MLflow Model Registry workflow for managing model lifecycle and deployment decisions.
+
+Implemented functionality:
+
+- automatic model registration after training
+- model versioning through MLflow Registry
+- staging and production deployment workflow
+- automated champion/challenger evaluation
+- automatic promotion of better-performing models
+- automatic archiving of weaker candidates
+- metric-based deployment decisions using validation MSE
+- reproducible orchestration using DVC pipelines
+
+### Deployment Flow
+
+The deployment pipeline follows:
+
+1. Train and evaluate GRU model
+2. Log metrics and artifacts with MLflow
+3. Register candidate model in MLflow Registry
+4. Move candidate to Staging
+5. Compare candidate against current Production model
+6. Promote better model to Production
+7. Archive weaker model version
+
+This creates a lightweight but production-oriented model lifecycle management system for time-series forecasting experiments.
+
+
 ## DVC Integration
 
 
