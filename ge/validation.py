@@ -1,5 +1,6 @@
 import great_expectations as gx
 
+from config import SEQUENCE_LENGTH
 from features.features import FEATURE_COLUMNS
 
 
@@ -86,8 +87,23 @@ def validate_training_data(validator):
     return result.success
 
 
-
 def validate_inference_data(df):
 
     required_columns = FEATURE_COLUMNS
+
+
+    if len(df) < SEQUENCE_LENGTH:
+        raise ValueError(f"Need at least {SEQUENCE_LENGTH} rows")
+
+    if df[required_columns].isnull().any().any():
+        raise ValueError("Null values detected")
+
+    if not df["timestamp"].is_unique:
+        raise ValueError("Timestamp not unique")
+
+    if (df["log_return"] < -0.5).any() or (df["log_return"] > 0.5).any():
+        raise ValueError("log_return out of bounds")
+
+    return True
+
 

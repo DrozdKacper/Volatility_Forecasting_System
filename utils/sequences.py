@@ -17,3 +17,7 @@ def create_sequences(df, seq_length):
     ])
 
     return xs, ys
+
+
+def create_inference_sequences(data, seq_length):
+    return np.expand_dims(data[-seq_length:], axis=0)
