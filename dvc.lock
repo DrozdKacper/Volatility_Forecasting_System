@@ -10,7 +10,7 @@ stages:
       nfiles: 2
     - path: config.py
       hash: md5
-      md5: 437e1036019491b1b6c96632ef79388b
+      md5: 588a105a16e055925f62c23a3aa4ffaf
       size: 202
     - path: data/processed/btc_features.csv
       hash: md5
@@ -28,8 +28,8 @@ stages:
       nfiles: 4
     - path: ge/
       hash: md5
-      md5: 02e4bcc4eacb4a32d4da514de7598fbd.dir
-      size: 4316
+      md5: ba78b38102b98735c3ff57f3895fc6ff.dir
+      size: 5695
       nfiles: 2
     - path: model/
       hash: md5
@@ -38,8 +38,8 @@ stages:
       nfiles: 3
     - path: train_gru.py
       hash: md5
-      md5: 08c09a2666c026b27e889bdb43977917
-      size: 4385
+      md5: e08bcc80ee5c2d949a2414ecdc63fd9a
+      size: 5047
     - path: training/
       hash: md5
       md5: 5cf0fb8cd9d21939fd03bdc6a0998457.dir
@@ -47,13 +47,13 @@ stages:
       nfiles: 3
     - path: utils/
       hash: md5
-      md5: 3a8fcff4cdab0adee6869fb5b3bacb88.dir
-      size: 7953
+      md5: 0d1b6e35f80607208bcf4901c292bcb5.dir
+      size: 8318
       nfiles: 11
     outs:
     - path: artifacts/latest_run.txt
       hash: md5
-      md5: 0f7340defb03c2ecb4912c4550477625
+      md5: 7f0d0d388845b856dd2f77f2e5700b8f
       size: 32
   register_model:
     cmd: python model_register/register_candidate.py
@@ -74,18 +74,18 @@ stages:
     deps:
     - path: artifacts/latest_run.txt
       hash: md5
-      md5: 0f7340defb03c2ecb4912c4550477625
+      md5: 7f0d0d388845b856dd2f77f2e5700b8f
       size: 32
     - path: model_register/register_candidate.py
       hash: md5
-      md5: be6eda6ee16a84b47241713928732127
-      size: 1202
+      md5: 2df315264ded640ac6065324ce17ca8a
+      size: 952
   promote:
     cmd: python model_register/promote_model.py
     deps:
     - path: artifacts/latest_run.txt
       hash: md5
-      md5: 0f7340defb03c2ecb4912c4550477625
+      md5: 7f0d0d388845b856dd2f77f2e5700b8f
       size: 32
     - path: model_register/promote_model.py
       hash: md5

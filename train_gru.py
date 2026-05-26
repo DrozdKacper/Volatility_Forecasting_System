@@ -1,5 +1,6 @@
 import os
 
+import joblib
 import pandas as pd
 import numpy as np
 
@@ -10,6 +11,7 @@ from ge.validation import prepare_validator, validate_training_data
 from model.gru_model import GRUModel
 from features.target import add_target
 from config import*
+from serving.volatility_model import VolatilityForecastModel
 from training.trainer_gru import train_model
 from etl.load import load_data
 from utils.seed import set_seed
@@ -23,6 +25,8 @@ import mlflow
 
 
 if __name__ == "__main__":
+
+    mlflow.set_tracking_uri("http://127.0.0.1:5000")
 
     set_seed(SEED)
 
@@ -64,6 +68,7 @@ if __name__ == "__main__":
         mlflow.log_param("learning_rate", LEARNING_RATE)
         mlflow.log_param("dropout", DROPOUT)
         mlflow.log_param("seed", SEED)
+
 
         for train_df, test_df in splits:
 
@@ -110,6 +115,10 @@ if __name__ == "__main__":
 
             results.append(res)
 
+        final_train_df = splits[-1][0]
+        global_scaler = StandardScaler()
+        global_scaler.fit(final_train_df[FEATURE_COLUMNS])
+
         mse_list = [r["mse"] for r in results]
         mae_list = [r["mae"] for r in results]
         skill_list = [r.get("skill", 0) for r in results]
@@ -125,11 +134,27 @@ if __name__ == "__main__":
         mlflow.log_metric("skill_std", np.std(skill_list))
 
         mlflow.log_metric("corr_mean", np.mean(corr_list))
-        mlflow.pytorch.log_model(model, "model")
+
+        os.makedirs("artifacts", exist_ok=True)
+
+        mlflow.pytorch.save_model(model, "artifacts/gru_model")
+
+        joblib.dump(global_scaler, "artifacts/scaler.pkl")
+
+        artifacts = {
+            "scaler": "artifacts/scaler.pkl",
+            "gru_model": "artifacts/gru_model"
+        }
+
+        mlflow.pyfunc.log_model(
+            artifact_path="model",
+            python_model=VolatilityForecastModel(),
+            artifacts=artifacts
+        )
 
         run_id = mlflow.active_run().info.run_id
 
-        os.makedirs("artifacts", exist_ok=True)
+
 
         with open("artifacts/latest_run.txt", "w") as f:
             f.write(run_id)
