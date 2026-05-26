@@ -196,6 +196,24 @@ The deployment pipeline follows:
 
 This creates a lightweight but production-oriented model lifecycle management system for time-series forecasting experiments.
 
+## Model Serving & Inference API
+
+The project includes a production-oriented inference layer built with FastAPI and MLflow Model Registry.
+
+Implemented functionality:
+
+- FastAPI `/predict` endpoint for volatility forecasting
+- dynamic loading of Production models from MLflow Registry
+- MLflow PyFunc-based inference wrapper
+- live OHLCV market data ingestion using CCXT
+- inference-time feature engineering and preprocessing
+- validation layer for inference data quality
+- GPU/CPU-compatible PyTorch inference pipeline
+
+Inference Pipeline:
+
+Live market data → Feature engineering → Validation → Sequence creation → GRU inference → API response
+
 
 ## DVC Integration
 
@@ -245,6 +263,9 @@ Pipeline workflow:
 - scikit-learn
 - MLflow
 - CCXT
+- FastAPI
+- DVC
+- Great Expectations
 
 ---
 
@@ -259,6 +280,10 @@ Pipeline workflow:
 - Experiment tracking
 - Reproducible ML workflows
 - Statistical baseline benchmarking
+- ML model serving
+- Inference API development
+- MLflow Model Registry integration
+- Production-style ML deployment workflows
 
 ---
 
@@ -266,11 +291,8 @@ Pipeline workflow:
 
 Future enhancements may include:
 
-- FastAPI model serving
 - Docker containerization
 - CI/CD pipelines
-- DVC integration
-- Great Expectations validation
 - NannyML monitoring
 - SHAP explainability
 
