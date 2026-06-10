@@ -14,21 +14,21 @@ model = None
 
 @app.on_event("startup")
 def load():
-
     global model
+
+    MODEL_NAME = "GRU_Volatility"
+    STAGE = "Production"
 
     client = MlflowClient()
 
     mv = client.get_latest_versions(
-        "GRU_Volatility",
-        stages=["Production"]
+        MODEL_NAME,
+        stages=[STAGE]
     )[0]
 
-    print("MODEL SOURCE:", mv.  source)
+    model_uri = f"runs:/{mv.run_id}/model"
 
-    model = mlflow.pyfunc.load_model(
-        mv.source
-    )
+    model = mlflow.pyfunc.load_model(model_uri)
 
 
 @app.get("/health")
@@ -38,7 +38,6 @@ def health():
 
 @app.post("/predict")
 def predict():
-
     df = fetch_all_ohlcv()
     df = df.iloc[:-1]
 

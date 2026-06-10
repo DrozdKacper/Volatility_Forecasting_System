@@ -6,13 +6,13 @@ import torch
 from config import SEQUENCE_LENGTH
 from features.features import add_features, FEATURE_COLUMNS
 from ge.validation import prepare_validator, validate_training_data, validate_inference_data
+from model.gru_model import GRUModel
 from utils.sequences import create_inference_sequences
 
 
 class VolatilityForecastModel(mlflow.pyfunc.PythonModel):
 
     def load_context(self, context):
-
         self.device = torch.device(
             "cuda" if torch.cuda.is_available() else "cpu"
         )
@@ -21,9 +21,14 @@ class VolatilityForecastModel(mlflow.pyfunc.PythonModel):
             context.artifacts["scaler"]
         )
 
-        self.model = mlflow.pytorch.load_model(
-            context.artifacts["gru_model"]
+        self.model = GRUModel()  # <-- KLUCZOWE
+
+        state = torch.load(
+            context.artifacts["gru_model"],
+            map_location=self.device
         )
+
+        self.model.load_state_dict(state)
 
         self.model.to(self.device)
         self.model.eval()

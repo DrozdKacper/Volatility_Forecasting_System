@@ -135,29 +135,18 @@ if __name__ == "__main__":
 
         mlflow.log_metric("corr_mean", np.mean(corr_list))
 
-        os.makedirs("artifacts", exist_ok=True)
+        joblib.dump(global_scaler, "scaler.pkl")
 
-        mlflow.pytorch.save_model(model, "artifacts/gru_model")
-
-        joblib.dump(global_scaler, "artifacts/scaler.pkl")
-
-        artifacts = {
-            "scaler": "artifacts/scaler.pkl",
-            "gru_model": "artifacts/gru_model"
-        }
+        torch.save(model.state_dict(), "gru.pt")
 
         mlflow.pyfunc.log_model(
             artifact_path="model",
             python_model=VolatilityForecastModel(),
-            artifacts=artifacts
+            artifacts={
+                "scaler": "scaler.pkl",
+                "gru_model": "gru.pt"
+            }
         )
-
-        run_id = mlflow.active_run().info.run_id
-
-
-
-        with open("artifacts/latest_run.txt", "w") as f:
-            f.write(run_id)
 
 
 
