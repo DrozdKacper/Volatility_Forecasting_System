@@ -214,6 +214,49 @@ Inference Pipeline:
 
 Live market data → Feature engineering → Validation → Sequence creation → GRU inference → API response
 
+---
+
+##  Dockerized MLOps Infrastructure
+
+The project is containerized using Docker Compose to provide a reproducible MLOps environment for training, tracking, and serving models.
+
+It includes:
+
+- **MLflow Tracking Server** (experiment tracking + model registry)
+- **MinIO Storage** (S3-compatible artifact storage)
+- **FastAPI Service** (real-time inference API)
+
+---
+
+###  Architecture Overview
+
+Services communicate via Docker internal networking:
+
+- API loads **Production model from MLflow Registry**
+- MLflow stores artifacts in **MinIO (S3 backend)**
+- Training pipeline logs experiments to MLflow
+
+---
+
+###  Persistence & Reproducibility
+
+The system uses Docker volumes and environment variables to ensure:
+
+- persistent experiment tracking (`mlflow.db`)
+- durable model storage (MinIO)
+- reproducible runs across environments
+
+---
+
+###  End-to-End Flow
+
+Training → MLflow logging → Model Registry → Promotion → FastAPI inference
+
+---
+
+This setup simulates a production-like MLOps pipeline for time-series forecasting.
+
+---
 
 ## DVC Integration
 
