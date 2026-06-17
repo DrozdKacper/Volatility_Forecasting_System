@@ -1,9 +1,12 @@
+import os
+
 import mlflow
 from mlflow.tracking import MlflowClient
 
 def promote_champion():
-
-    mlflow.set_tracking_uri("http://127.0.0.1:5000")
+    mlflow.set_tracking_uri(
+        os.getenv("MLFLOW_TRACKING_URI", "http://127.0.0.1:5000")
+    )
     client = MlflowClient()
 
     staging_models = client.get_latest_versions(
@@ -25,7 +28,7 @@ def promote_champion():
         run = client.get_run(m.run_id)
         return run.data.metrics.get("mse_mean", float("inf"))
 
-    candidate = max(staging_models, key=get_mse)
+    candidate = min(staging_models, key=get_mse)
 
     candidate_run = client.get_run(candidate.run_id)
     candidate_mse = candidate_run.data.metrics.get("mse_mean")

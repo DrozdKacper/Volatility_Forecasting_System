@@ -21,12 +21,15 @@ from utils.dataset import create_dataloader
 import torch
 from sklearn.preprocessing import StandardScaler
 import mlflow
+from pathlib import Path
 
 
 
 if __name__ == "__main__":
 
-    mlflow.set_tracking_uri("http://127.0.0.1:5000")
+    mlflow.set_tracking_uri(
+        os.getenv("MLFLOW_TRACKING_URI", "http://127.0.0.1:5000")
+    )
 
     set_seed(SEED)
 
@@ -55,6 +58,7 @@ if __name__ == "__main__":
 
 
     with mlflow.start_run(run_name="GRU_volatility_rolling"):
+        print(mlflow.get_tracking_uri())
         model = GRUModel().to(device)
         results = []
         mlflow.log_param("model", "GRU")
@@ -136,7 +140,6 @@ if __name__ == "__main__":
         mlflow.log_metric("corr_mean", np.mean(corr_list))
 
         joblib.dump(global_scaler, "scaler.pkl")
-
         torch.save(model.state_dict(), "gru.pt")
 
         mlflow.pyfunc.log_model(
@@ -147,8 +150,6 @@ if __name__ == "__main__":
                 "gru_model": "gru.pt"
             }
         )
-
-
 
 
 

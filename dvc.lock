@@ -10,12 +10,14 @@ stages:
       nfiles: 2
     - path: config.py
       hash: md5
-      md5: 588a105a16e055925f62c23a3aa4ffaf
+      md5: 7f8fee24d0a70c937a148aedb0a4e300
       size: 202
+      isexec: true
     - path: data/processed/btc_features.csv
       hash: md5
       md5: f4b5790ce7cc75bee104df7df6c64466
       size: 15442253
+      isexec: true
     - path: evaluation/
       hash: md5
       md5: ff9f49199ebae94b2245d4705fd16e52.dir
@@ -23,12 +25,12 @@ stages:
       nfiles: 4
     - path: features/
       hash: md5
-      md5: 2df2da8ff2bca86b4e6dc4c5e67d4bca.dir
-      size: 5484
+      md5: e1e881efa4bffb360ff77b1c3e0e17d5.dir
+      size: 5162
       nfiles: 4
     - path: ge/
       hash: md5
-      md5: ba78b38102b98735c3ff57f3895fc6ff.dir
+      md5: 63b845b6945f14cb9dd8350b62b34898.dir
       size: 5695
       nfiles: 2
     - path: model/
@@ -38,8 +40,9 @@ stages:
       nfiles: 3
     - path: train_gru.py
       hash: md5
-      md5: e08bcc80ee5c2d949a2414ecdc63fd9a
-      size: 5047
+      md5: b6b6bac9824c336e38b4f2ecfebc5fd6
+      size: 4894
+      isexec: true
     - path: training/
       hash: md5
       md5: 5cf0fb8cd9d21939fd03bdc6a0998457.dir
@@ -47,14 +50,9 @@ stages:
       nfiles: 3
     - path: utils/
       hash: md5
-      md5: 0d1b6e35f80607208bcf4901c292bcb5.dir
+      md5: e158cc6044baba00836d670d2b2372ec.dir
       size: 8318
       nfiles: 11
-    outs:
-    - path: artifacts/latest_run.txt
-      hash: md5
-      md5: 7f0d0d388845b856dd2f77f2e5700b8f
-      size: 32
   register_model:
     cmd: python model_register/register_candidate.py
     deps:

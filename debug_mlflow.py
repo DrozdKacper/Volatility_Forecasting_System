@@ -1,11 +1,23 @@
-from mlflow.tracking import MlflowClient
-import mlflow
+from mlflow import MlflowClient
 
-mlflow.set_tracking_uri("http://127.0.0.1:5000")
 client = MlflowClient()
 
-mv = client.get_latest_versions("GRU_Volatility")[0]
+for mv in client.search_model_versions("name='GRU_Volatility'"):
+    print("version:", mv.version)
+    print("source:", mv.source)
+    print("run_id:", mv.run_id)
+    print("---")
 
-print("VERSION:", mv.version)
-print("SOURCE:", mv.source)
-print("RUN_ID:", mv.run_id)
+
+
+run = client.get_run(
+    "b7012d1759a14ca3a0dbc94172c65623"
+)
+
+print(run.info.artifact_uri)
+
+
+for f in client.list_artifacts(
+    "b7012d1759a14ca3a0dbc94172c65623"
+):
+    print(f.path)

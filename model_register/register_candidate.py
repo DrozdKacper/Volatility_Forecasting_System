@@ -1,3 +1,5 @@
+import os
+
 from mlflow import MlflowClient, MlflowException
 import mlflow
 
@@ -5,7 +7,10 @@ from mlflow import MlflowClient, MlflowException
 import mlflow
 
 def register_latest_model():
-    mlflow.set_tracking_uri("http://127.0.0.1:5000")
+
+    mlflow.set_tracking_uri(
+        os.getenv("MLFLOW_TRACKING_URI", "http://127.0.0.1:5000")
+    )
 
     client = MlflowClient()
 
