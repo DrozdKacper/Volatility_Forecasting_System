@@ -69,3 +69,22 @@ checkpoints/
 # =========================
 .DS_Store
 Thumbs.db
+
+*.tar
+docker-data/
+docker-volumes/
+
+# Environment variables
+.env
+.env.*
+
+# Docker Compose overrides
+docker-compose.override.yml
+
+# Temporary files
+tmp/
+temp/
+
+# PyTorch model artifacts
+*.pt
+*.pth

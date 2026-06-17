@@ -111,7 +111,7 @@ if __name__ == '__main__':
     raw_df = fetch_all_ohlcv(
         symbol="BTC/USDT",
         timeframe="1h",
-        start_date="2026-05-23T00:00:00Z"
+        start_date="2026-06-08T00:00:00Z"
     )
 
     print(raw_df)
