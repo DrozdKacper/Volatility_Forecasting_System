@@ -1,0 +1,11 @@
+name: Test runner
+
+on: [push]
+
+jobs:
+  test:
+    runs-on: [self-hosted]
+
+    steps:
+      - run: echo "Runner is working"
+      - run: nvidia-smi
