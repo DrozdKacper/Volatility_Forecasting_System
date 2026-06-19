@@ -6,6 +6,7 @@ on:
   push:
     branches:
       - "experiments/**"
+      - "feature/ci-cd"
 
 jobs:
   experiment:
