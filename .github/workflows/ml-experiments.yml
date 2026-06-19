@@ -18,6 +18,9 @@ jobs:
       - name: Pull data
         run: dvc pull
 
+      - name: Checkout data
+        run: dvc checkout
+
       - name: Run full pipeline
         run: dvc repro
 
