@@ -1,0 +1,32 @@
+name: Experiment Pipeline
+
+on:
+  workflow_dispatch:
+
+  push:
+    branches:
+      - "experiments/**"
+      - "feature/ci-cd"
+
+jobs:
+  experiment:
+    runs-on: [self-hosted, local-gpu-docker]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Pull data
+        run: dvc pull
+
+      - name: Checkout data
+        run: dvc checkout
+
+      - name: Run full pipeline
+        run: dvc repro
+
+      - name: Register candidate
+        run: python model_register/register_candidate.py
+
+      - name: Champion Challenger
+        run: python model_register/promote_model.py
+
