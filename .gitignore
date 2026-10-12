@@ -20,14 +20,13 @@ ENV/
 .vscode/
 *.iml
 
-# =========================
-# Data folders (tracked by DVC)
-# =========================
-data/raw/
-data/processed/
+# Data files are stored in DVC remote
+data/raw/*
+data/processed/*
 
-# Allow DVC metadata files
-!*.dvc
+# Keep DVC metadata files in Git
+!data/raw/*.dvc
+!data/processed/*.dvc
 
 # =========================
 # DVC
