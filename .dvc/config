@@ -1,7 +1,6 @@
 [core]
     remote = minio
-['remote "localstorage"']
-    url = C:\btc_files
+
 ['remote "minio"']
     url = s3://dvc
     endpointurl = http://minio:9000
