@@ -25,7 +25,7 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install -r requirements-ml.txt
 
-      - name: Debug DVC files
+      - name: Pull DVC data
         run: |
           echo "=== Git-tracked DVC metadata ==="
           git ls-files "*.dvc" "dvc.yaml" ".dvc/config"
@@ -33,20 +33,14 @@ jobs:
           echo "=== Data files before pull ==="
           ls -lah data/raw data/processed || true
 
-          echo "=== DVC pull ==="
+          echo "=== Pull data from MinIO ==="
           dvc pull -v data/processed/btc_features.csv.dvc data/raw/btc_1h.csv.dvc
 
           echo "=== Data files after pull ==="
           ls -lah data/raw data/processed
 
           test -f data/processed/btc_features.csv
-          test -f data/raw/btc_1h.csv  
-
-      - name: Pull data
-        run: dvc pull
-
-      - name: Checkout data
-        run: dvc checkout
+          test -f data/raw/btc_1h.csv
 
       - name: Run full pipeline
         run: dvc repro
@@ -56,4 +50,3 @@ jobs:
 
       - name: Champion Challenger
         run: python model_register/promote_model.py
-
