@@ -1,0 +1,52 @@
+name: Experiment Pipeline
+
+on:
+  workflow_dispatch:
+
+  push:
+    branches:
+      - "experiments/**"
+      - "feature/ci-cd"
+
+jobs:
+  experiment:
+    runs-on: [self-hosted, local-gpu-docker]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install ML dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements-ml.txt
+
+      - name: Pull DVC data
+        run: |
+          echo "=== Git-tracked DVC metadata ==="
+          git ls-files "*.dvc" "dvc.yaml" ".dvc/config"
+
+          echo "=== Data files before pull ==="
+          ls -lah data/raw data/processed || true
+
+          echo "=== Pull data from MinIO ==="
+          dvc pull -v data/processed/btc_features.csv.dvc data/raw/btc_1h.csv.dvc
+
+          echo "=== Data files after pull ==="
+          ls -lah data/raw data/processed
+
+          test -f data/processed/btc_features.csv
+          test -f data/raw/btc_1h.csv
+
+      - name: Run full pipeline
+        run: dvc repro
+
+      - name: Register candidate
+        run: python model_register/register_candidate.py
+
+      - name: Champion Challenger
+        run: python model_register/promote_model.py

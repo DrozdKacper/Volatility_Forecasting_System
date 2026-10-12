@@ -56,4 +56,32 @@ services:
       - .:/app
 
 
+  cml-runner:
+    image: dvcorg/cml:latest
+    container_name: cml_local_runner
+    restart: always
+    depends_on:
+      - mlflow
+      - minio
+    environment:
+      - REPO_TOKEN=${GITHUB_PAT}
+      - MLFLOW_TRACKING_URI=${MLFLOW_TRACKING_URI}
+      - MLFLOW_S3_ENDPOINT_URL=${MLFLOW_S3_ENDPOINT_URL}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}
+    command: >
+      cml runner launch
+      --repo="https://github.com/DrozdKacper/Volatility_Forecasting_System"
+      --labels="local-gpu-docker"
+      --idle-timeout=0
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [ gpu ]
+
+
     gpus: all

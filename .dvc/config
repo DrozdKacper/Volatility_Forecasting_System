@@ -1,4 +1,8 @@
 [core]
-    remote = localstorage
-['remote "localstorage"']
-    url = C:\btc_files
+    remote = minio
+
+['remote "minio"']
+    url = s3://dvc
+    endpointurl = http://minio:9000
+    access_key_id = minioadmin
+    secret_access_key = minioadmin
