@@ -15,6 +15,23 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Debug DVC files
+        run: |
+          echo "=== Git-tracked DVC metadata ==="
+          git ls-files "*.dvc" "dvc.yaml" ".dvc/config"
+
+          echo "=== Data files before pull ==="
+          ls -lah data/raw data/processed || true
+
+          echo "=== DVC pull ==="
+          dvc pull -v data/processed/btc_features.csv.dvc data/raw/btc_1h.csv.dvc
+
+          echo "=== Data files after pull ==="
+          ls -lah data/raw data/processed
+
+          test -f data/processed/btc_features.csv
+          test -f data/raw/btc_1h.csv  
+
       - name: Pull data
         run: dvc pull
 
